@@ -1,9 +1,11 @@
 package com.java.engine.webquiz.controller;
 
+import com.java.engine.webquiz.model.CompletedQuizDto;
+import com.java.engine.webquiz.model.Quiz;
+import com.java.engine.webquiz.model.QuizDto;
+import com.java.engine.webquiz.model.User;
 import com.java.engine.webquiz.payload.AnswerRequest;
-import com.java.engine.webquiz.model.*;
 import com.java.engine.webquiz.payload.SolveResponse;
-import com.java.engine.webquiz.repository.OptionRepository;
 import com.java.engine.webquiz.service.QuizService;
 import com.java.engine.webquiz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -24,15 +25,11 @@ public class QuizController {
     private final QuizService quizService;
     private final UserService userService;
 
-    private final OptionRepository optionRepository;
-
     @Autowired
     public QuizController(QuizService quizService,
-                          UserService userService,
-                          OptionRepository optionRepository) {
+                          UserService userService) {
         this.quizService = quizService;
         this.userService = userService;
-        this.optionRepository = optionRepository;
     }
 
 
@@ -67,15 +64,12 @@ public class QuizController {
 
     @PostMapping(consumes = "application/json")
     public QuizDto createQuiz(@RequestBody @Valid QuizDto newQuiz, Principal principal) {
-        Quiz quiz = new Quiz(newQuiz);
         Optional<User> quizAuthor = userService.findByEmail(principal.getName());
         if (quizAuthor.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to log in or register to create quizzes");
         }
-        quiz.setAuthor(quizAuthor.get());
 
-        Quiz savedQuiz = quizService.save(quiz);
-        return new QuizDto(savedQuiz);
+        return quizService.createQuiz(newQuiz, quizAuthor.get());
     }
 
     @PostMapping(value = "/{id}/solve", consumes = "application/json")
@@ -89,27 +83,7 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to log in or register to create quizzes");
         }
 
-        List<Option> answerOptions = optionRepository.findByQuizIdAndAnswerTrue(id);
-        if (answerOptions.size() != answer.getAnswer().size()) {
-            return new SolveResponse(false, "Wrong answer! Please, try again.");
-        } else if (answer.getAnswer().size() != 0) {
-            for (Option answerOption : answerOptions) {
-                if (!answer.getAnswer().contains(answerOption.getNum())) {
-                    return new SolveResponse(false, "Wrong answer! Please, try again.");
-                }
-            }
-        }
-
-        CompletedQuiz completedQuiz = new CompletedQuiz();
-        completedQuiz.setCompletedAt(LocalDateTime.now());
-        completedQuiz.setQuiz(quiz.get());
-        completedQuiz.setUser(currentUser.get());
-        userService.saveCompletedQuiz(completedQuiz);
-
-        quiz.get().addCompletion(completedQuiz);
-        quizService.save(quiz.get());
-
-        return new SolveResponse(true, "Congratulations, you're right!");
+        return quizService.solveQuiz(id, answer, quiz.get(), currentUser.get());
     }
 
     @GetMapping("/completed")
@@ -119,6 +93,6 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to log in or register to create quizzes");
         }
 
-        return userService.getCompletedQuizzesByUserId(page, currentUser.get().getId());
+        return quizService.getCompletedQuizzesByUserId(page, currentUser.get().getId());
     }
 }
