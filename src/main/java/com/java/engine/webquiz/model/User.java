@@ -1,5 +1,7 @@
 package com.java.engine.webquiz.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Getter @Setter
 public class User {
 
     @Id
@@ -39,45 +42,5 @@ public class User {
     public User(UserDto userDto) {
         this.email = userDto.getEmail();
         this.password = userDto.getPassword();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Quiz> getQuizzes() {
-        return quizzes;
-    }
-
-    public void setQuizzes(List<Quiz> quizzes) {
-        this.quizzes = quizzes;
-    }
-
-    public List<CompletedQuiz> getCompletedQuizzes() {
-        return completedQuizzes;
-    }
-
-    public void setCompletedQuizzes(List<CompletedQuiz> completedQuizzes) {
-        this.completedQuizzes = completedQuizzes;
     }
 }

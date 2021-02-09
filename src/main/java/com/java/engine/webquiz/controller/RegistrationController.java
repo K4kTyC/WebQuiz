@@ -16,17 +16,17 @@ import javax.validation.Valid;
 @RequestMapping("/api/register")
 public class RegistrationController {
 
-    private final UserService userDetailsService;
+    private final UserService userService;
 
     @Autowired
-    public RegistrationController(UserService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
 
     @PostMapping(consumes = "application/json")
     public String register(@RequestBody @Valid UserDto userDto) {
-        if (!userDetailsService.registerUser(userDto)) {
+        if (!userService.registerUser(userDto)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with such email is already registered");
         }
         return "You successfully registered";

@@ -1,6 +1,7 @@
 package com.java.engine.webquiz.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class QuizDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -24,7 +26,7 @@ public class QuizDto {
     private List<String> options;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Integer> answer = new ArrayList<>();
+    private List<Integer> answer;
 
 
     public QuizDto() { }
@@ -41,25 +43,5 @@ public class QuizDto {
         this.options = options;
 
         this.answer = new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public List<String> getOptions() {
-        return options;
-    }
-
-    public List<Integer> getAnswer() {
-        return answer;
     }
 }

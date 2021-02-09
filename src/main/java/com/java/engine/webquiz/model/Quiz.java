@@ -1,5 +1,7 @@
 package com.java.engine.webquiz.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "quizzes")
+@Getter @Setter
 public class Quiz {
 
     @Id
@@ -57,53 +60,5 @@ public class Quiz {
 
     public void addCompletion(CompletedQuiz completedQuiz) {
         completions.add(completedQuiz);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public List<Option> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<Option> options) {
-        this.options = options;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public List<CompletedQuiz> getCompletions() {
-        return completions;
-    }
-
-    public void setCompletions(List<CompletedQuiz> completions) {
-        this.completions = completions;
     }
 }

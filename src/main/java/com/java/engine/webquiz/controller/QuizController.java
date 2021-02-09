@@ -89,7 +89,7 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to log in or register to create quizzes");
         }
 
-        List<Option> answerOptions = optionRepository.findByQuiz_IdAndAnswerTrue(id);
+        List<Option> answerOptions = optionRepository.findByQuizIdAndAnswerTrue(id);
         if (answerOptions.size() != answer.getAnswer().size()) {
             return new SolveResponse(false, "Wrong answer! Please, try again.");
         } else if (answer.getAnswer().size() != 0) {

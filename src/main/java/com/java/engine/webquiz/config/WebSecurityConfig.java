@@ -14,8 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserService userService;
+
     @Autowired
-    private UserService userDetailsService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
 
     @Override
@@ -27,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/actuator/shutdown", "/api/register").anonymous()
+                    .antMatchers("/api/register").anonymous()
                     .anyRequest().hasRole("USER")
                     .and()
                 .httpBasic()
@@ -43,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(getPasswordEncoder());
         return authProvider;
     }
