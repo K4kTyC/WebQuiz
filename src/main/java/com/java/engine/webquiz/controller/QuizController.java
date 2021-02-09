@@ -22,13 +22,15 @@ import java.util.Optional;
 @RequestMapping("/api/quizzes")
 public class QuizController {
 
-    private final QuizService quizService;
-    private final UserService userService;
+    private QuizService quizService;
+    private UserService userService;
 
     @Autowired
-    public QuizController(QuizService quizService,
-                          UserService userService) {
+    public void setQuizService(QuizService quizService) {
         this.quizService = quizService;
+    }
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
