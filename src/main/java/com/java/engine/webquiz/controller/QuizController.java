@@ -4,8 +4,8 @@ import com.java.engine.webquiz.model.CompletedQuizDto;
 import com.java.engine.webquiz.model.Quiz;
 import com.java.engine.webquiz.model.QuizDto;
 import com.java.engine.webquiz.model.User;
-import com.java.engine.webquiz.payload.AnswerRequest;
-import com.java.engine.webquiz.payload.SolveResponse;
+import com.java.engine.webquiz.model.AnswerRequest;
+import com.java.engine.webquiz.model.SolveResponse;
 import com.java.engine.webquiz.service.QuizService;
 import com.java.engine.webquiz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,15 @@ import java.util.Optional;
 @RequestMapping("/api/quizzes")
 public class QuizController {
 
-    private final QuizService quizService;
-    private final UserService userService;
+    private QuizService quizService;
+    private UserService userService;
 
     @Autowired
-    public QuizController(QuizService quizService,
-                          UserService userService) {
+    public void setQuizService(QuizService quizService) {
         this.quizService = quizService;
+    }
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
