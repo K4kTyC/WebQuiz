@@ -1,4 +1,4 @@
-package com.java.engine.webquiz.payload;
+package com.java.engine.webquiz.model;
 
 import java.util.ArrayList;
 import java.util.List;

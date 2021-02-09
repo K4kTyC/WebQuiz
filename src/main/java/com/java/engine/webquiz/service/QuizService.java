@@ -1,8 +1,8 @@
 package com.java.engine.webquiz.service;
 
 import com.java.engine.webquiz.model.*;
-import com.java.engine.webquiz.payload.AnswerRequest;
-import com.java.engine.webquiz.payload.SolveResponse;
+import com.java.engine.webquiz.model.AnswerRequest;
+import com.java.engine.webquiz.model.SolveResponse;
 import com.java.engine.webquiz.repository.CompletedQuizRepository;
 import com.java.engine.webquiz.repository.OptionRepository;
 import com.java.engine.webquiz.repository.QuizRepository;
